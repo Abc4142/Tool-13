@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Compress your images online with custom quality control. Free image compression tool for JPG, JPEG, PNG.">
+  <meta name="keywords" content="Image Compression Tool, Compress JPG PNG, Image Optimizer, Online Free Tool">
+  <meta name="author" content="YourName">
+  <title>📷 Image Compression Tool - Free Optimizer</title>
+
+  <style>
+    :root {
+      --main-color: #4CAF50;
+      --light-bg: #f9f9f9;
+      --dark-text: #333;
+      --border-radius: 12px;
+      --shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: var(--light-bg);
+      color: var(--dark-text);
+      line-height: 1.6;
+    }
+
+    header {
+      background-color: var(--main-color);
+      color: white;
+      padding: 2rem 1rem;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 2rem;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 2rem auto;
+      background: white;
+      border-radius: var(--border-radius);
+      padding: 2rem;
+      box-shadow: var(--shadow);
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    label {
+      font-weight: bold;
+    }
+
+    input[type="file"],
+    input[type="range"] {
+      width: 100%;
+      margin-top: 0.5rem;
+    }
+
+    #qualityValue {
+      font-weight: bold;
+      color: var(--main-color);
+    }
+
+    button {
+      background: var(--main-color);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background: #388e3c;
+    }
+
+    .preview-section {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .preview-box {
+      flex: 1;
+      text-align: center;
+    }
+
+    .preview-box img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+
+    .ad-space {
+      border: 2px dashed #bbb;
+      padding: 1rem;
+      margin: 2rem 0;
+      text-align: center;
+      color: #888;
+      font-size: 0.9rem;
+      background: #fafafa;
+    }
+
+    footer {
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.9rem;
+      color: #666;
+    }
+
+    @media (min-width: 768px) {
+      .preview-section {
+        flex-direction: row;
+      }
+
+      .preview-box h3 {
+        font-size: 1.1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>📷 Image Compression Tool</h1>
+    <p>Compress JPG, PNG images online with custom quality</p>
+  </header>
+
+  <div class="container">
+    <!-- Top Ad -->
+    <div class="ad-space">
+      <!-- Replace this with your AdSense script -->
+      🔷 Top Ad Unit Here (Google AdSense)
+    </div>
+
+    <!-- Upload and Quality -->
+    <div class="form-group">
+      <label for="imageInput">Select Image:</label>
+      <input type="file" id="imageInput" accept="image/*" />
+    </div>
+
+    <div class="form-group">
+      <label for="qualityRange">Compression Quality: <span id="qualityValue">0.7</span></label>
+      <input type="range" id="qualityRange" min="0.1" max="1" step="0.1" value="0.7" />
+    </div>
+
+    <div class="form-group">
+      <button onclick="compressImage()">🎯 Compress & Download</button>
+    </div>
+
+    <!-- Preview Section -->
+    <div class="preview-section">
+      <div class="preview-box">
+        <h3>Original Image</h3>
+        <img id="originalImage" src="" alt="Original Preview" />
+      </div>
+      <div class="preview-box">
+        <h3>Compressed Image</h3>
+        <img id="compressedImage" src="" alt="Compressed Preview" />
+      </div>
+    </div>
+
+    <!-- Bottom Ad -->
+    <div class="ad-space">
+      🔷 Bottom Ad Unit Here (Google AdSense)
+    </div>
+  </div>
+
+  <footer>
+    &copy; 2025 Image Compression Tool | Made for Web & Mobile by YourName
+  </footer>
+
+  <script>
+    const imageInput = document.getElementById('imageInput');
+    const originalImage = document.getElementById('originalImage');
+    const compressedImage = document.getElementById('compressedImage');
+    const qualityRange = document.getElementById('qualityRange');
+    const qualityValue = document.getElementById('qualityValue');
+
+    let loadedImage = null;
+
+    qualityRange.addEventListener('input', () => {
+      qualityValue.textContent = qualityRange.value;
+    });
+
+    imageInput.addEventListener('change', () => {
+      const file = imageInput.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          originalImage.src = e.target.result;
+          loadedImage = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    function compressImage() {
+      if (!loadedImage) {
+        alert("Please select an image to compress.");
+        return;
+      }
+
+      const img = new Image();
+      img.src = loadedImage;
+      img.onload = function () {
+        const canvas = document.createElement("canvas");
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0);
+
+        const quality = parseFloat(qualityRange.value);
+        const compressedDataUrl = canvas.toDataURL("image/jpeg", quality);
+        compressedImage.src = compressedDataUrl;
+
+        // Auto download
+        const link = document.createElement("a");
+        link.href = compressedDataUrl;
+        link.download = "compressed-image.jpg";
+        link.click();
+      };
+    }
+  </script>
+
+</body>
+</html>
